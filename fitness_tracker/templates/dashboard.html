@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block body %}
+<h1>Hi, {{ session.name }}</h1>
+<div class="card"><h2>Today's insights</h2>{% for i in insights %}<div class="tip">{{ i }}</div>{% endfor %}</div>
+{% if plan %}<div class="grid">
+<div class="card"><h2>Body</h2><div class="stat">BMI {{ plan.bmi }}</div><div class="muted">{{ plan.cat }}. Goal: {{ plan.goal }}</div></div>
+<div class="card"><h2>Today's macros</h2>
+{% for k,l,c,u in [('cal','Calories','--accent',''),('protein','Protein','--p',' g'),('carbs','Carbs','--c',' g'),('fats','Fats','--f',' g')] %}
+{% set tgt = plan[k] %}<div>{{ l }}: {{ today_tot[k]|round|int }} / {{ tgt }}{{ ' kcal' if k=='cal' else u }}</div>
+<div class="bar"><i style="width:{{ [100, (today_tot[k]/tgt*100) if tgt else 0]|min }}%;background:var({{ c }})"></i></div>{% endfor %}</div></div>{% endif %}
+<div class="grid">
+<div class="card"><h2>Body weight (kg)</h2><canvas id="c1"></canvas></div>
+<div class="card"><h2>Calories, last 7 days</h2><canvas id="c2"></canvas></div>
+<div class="card"><h2>Lifting volume (kg), last 7 sessions</h2><canvas id="c3"></canvas></div>
+<div class="card"><h2>Upcoming reminders today</h2>
+{% for r in rem %}<div><b>{{ r.time }}</b> {{ r.label }} <span class="muted">({{ r.kind }})</span></div>
+{% else %}<p class="muted">None left today. <a href="{{ url_for('reminders') }}">Add a reminder</a>.</p>{% endfor %}</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+function mk(id,t,d,color){new Chart(document.getElementById(id),{type:t,data:{labels:d.map(x=>x[0]),
+datasets:[{data:d.map(x=>x[1]),borderColor:color,backgroundColor:color,tension:.3}]},options:{plugins:{legend:{display:false}}}})}
+mk('c1','line',{{ wt|tojson }},'#2a6fdb');mk('c2','bar',{{ cal|tojson }},'#e09f1f');mk('c3','bar',{{ vol|tojson }},'#c2465a');
+</script>{% endblock %}

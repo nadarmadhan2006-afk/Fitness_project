@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block body %}
+<h1>Workouts</h1><div class="grid">
+<div class="card"><h2>Log a set</h2><form method="post">
+<label>Exercise</label><input name="exercise" placeholder="Bench press" required>
+<label>Sets</label><input name="sets" type="number" min="1" required>
+<label>Reps per set</label><input name="reps" type="number" min="1" required>
+<label>Weight (kg)</label><input name="weight" type="number" step="0.5" min="0" required>
+<button>Save workout</button></form></div>
+<div class="card"><h2>Progressive overload tips</h2>
+{% for e,t in tips.items() %}<div class="tip"><b>{{ e }}</b><br>{{ t }}</div>
+{% else %}<p class="muted">Log a workout and your next-session target appears here.</p>{% endfor %}</div></div>
+<div class="card"><h2>History</h2><table><tr><th>Date</th><th>Exercise</th><th>Sets</th><th>Reps</th><th>Weight</th></tr>
+{% for r in rows %}<tr><td>{{ r.day }}</td><td>{{ r.exercise }}</td><td>{{ r.sets }}</td><td>{{ r.reps }}</td><td>{{ r.weight }} kg</td></tr>{% endfor %}</table></div>{% endblock %}

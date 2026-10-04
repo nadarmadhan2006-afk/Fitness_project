@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% block body %}
+<h1>Body & Diet</h1><div class="grid">
+<div class="card"><h2>Update metrics</h2><form method="post">
+<label>Weight (kg)</label><input name="weight" type="number" step="0.1" required value="{{ last.weight if last }}">
+<label>Height (cm)</label><input name="height" type="number" step="0.1" required value="{{ last.height if last }}">
+<label>Age</label><input name="age" type="number" required value="{{ last.age if last }}">
+<label>Sex</label><select name="sex"><option>Male</option><option>Female</option></select>
+<label>Goal</label><select name="goal"><option value="Bulk">Bulk (gain muscle)</option><option value="Cut">Cut (lose fat)</option></select>
+<button>Save and update plan</button></form></div>
+<div class="card"><h2>Your plan</h2>
+{% if plan %}<p><b>BMI {{ plan.bmi }}</b> - {{ plan.cat }}</p>
+<div class="stat">{{ plan.cal }} kcal</div><p class="muted">daily target for {{ plan.goal|lower }}ting</p>
+<p>Protein {{ plan.protein }} g<br>Carbs {{ plan.carbs }} g<br>Fats {{ plan.fats }} g</p>
+<p class="muted">Estimated with the Mifflin-St Jeor formula at moderate activity: +300 kcal to bulk, -400 kcal to cut.</p>
+{% else %}<p class="muted">Save your metrics to see your BMI and diet plan.</p>{% endif %}</div></div>
+<div class="card"><h2>History</h2><table><tr><th>Date</th><th>Weight</th><th>Height</th><th>Goal</th></tr>
+{% for r in rows %}<tr><td>{{ r.day }}</td><td>{{ r.weight }} kg</td><td>{{ r.height }} cm</td><td>{{ r.goal }}</td></tr>{% endfor %}</table></div>{% endblock %}

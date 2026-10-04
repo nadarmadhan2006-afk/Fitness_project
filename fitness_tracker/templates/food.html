@@ -1,0 +1,25 @@
+{% extends "base.html" %}{% block body %}
+<h1>Food & Macros</h1>
+<div class="card"><h2>Scan a meal or nutrition label</h2><p class="muted">Upload a photo. Every food is detected and its macros are added to today's total.</p>
+<form method="post" enctype="multipart/form-data"><input type="hidden" name="action" value="scan">
+<label>Photo</label><input type="file" name="photo" accept="image/*" required>
+<button>Scan and add automatically</button></form>
+{% if saved %}{% endif %}
+</div>
+
+<div class="card"><h2>Add an ingredient manually</h2>
+<p class="muted">Use this for anything the scan missed.</p>
+<form method="post"><input type="hidden" name="action" value="add">
+<label>Food</label><select name="food">{% for f in foods %}<option>{{ f }}</option>{% endfor %}</select>
+<label>Quantity (grams)</label><input name="grams" type="number" step="1" min="1" value="100" required>
+<button class="sec">Add to today</button></form></div>
+
+<div class="card"><h2>Today's meals</h2>
+<table><tr><th>Food</th><th>Grams</th><th>kcal</th><th>P</th><th>C</th><th>F</th><th></th></tr>
+{% for m in meals %}<tr><td>{{ m.food }}</td>
+<td><form method="post" action="{{ url_for('meal_edit', mid=m.id) }}" style="display:flex;gap:4px"><input name="grams" type="number" value="{{ m.grams|int }}" style="width:80px"><button class="sec" style="margin:0;padding:4px 8px">Update</button></form></td>
+<td>{{ m.cal }}</td><td>{{ m.protein }}</td><td>{{ m.carbs }}</td><td>{{ m.fats }}</td>
+<td><a class="del" href="{{ url_for('meal_delete', mid=m.id) }}">Remove</a></td></tr>
+{% else %}<tr><td colspan="7" class="muted">No meals yet. Scan a photo or add a food above.</td></tr>{% endfor %}
+<tr><th>Total</th><th></th><th>{{ tot.cal }}</th><th>{{ tot.protein }}</th><th>{{ tot.carbs }}</th><th>{{ tot.fats }}</th><th></th></tr></table>
+<p class="muted">Protein (P), carbs (C) and fats (F) are in grams.</p></div>{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block body %}
+<h1>Reminders</h1><div class="grid">
+<div class="card"><h2>Add reminder</h2><form method="post">
+<label>What</label><input name="label" placeholder="Take creatine" required>
+<label>Time</label><input name="time" type="time" required>
+<label>Type</label><select name="kind"><option>Meal</option><option>Supplement</option><option>Workout</option></select>
+<button>Save reminder</button></form></div>
+<div class="card"><h2>Your reminders</h2>
+{% for r in rows %}<div><b>{{ r.time }}</b> {{ r.label }} <span class="muted">({{ r.kind }})</span>
+ <a class="del" href="{{ url_for('reminder_delete', rid=r.id) }}">Remove</a></div>
+{% else %}<p class="muted">No reminders yet.</p>{% endfor %}</div></div>{% endblock %}

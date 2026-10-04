@@ -1,0 +1,31 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FormLog - Fitness & Nutrition Tracker</title>
+<style>
+:root{--ink:#14213d;--muted:#5c677d;--bg:#f2f5f9;--card:#fff;--line:#dbe2ec;--accent:#2a6fdb;--p:#2a6fdb;--c:#e09f1f;--f:#c2465a}
+*{box-sizing:border-box}body{margin:0;font:16px/1.5 "Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+nav{background:var(--ink);display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:10px 20px}
+nav b{color:#fff;font-size:1.2rem;margin-right:20px;letter-spacing:.5px}
+nav a{color:#c9d3e6;text-decoration:none;padding:6px 12px;border-radius:6px}nav a:hover,nav a.on{background:#24355c;color:#fff}
+nav .sp{flex:1}
+main{max-width:1000px;margin:24px auto;padding:0 16px}
+h1{font-size:1.6rem;margin:0 0 16px}h2{font-size:1.1rem;margin:0 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+label{display:block;font-size:.9rem;color:var(--muted);margin:10px 0 3px}
+input,select{width:100%;padding:9px;border:1px solid var(--line);border-radius:6px;font:inherit}
+button,.btn{background:var(--accent);color:#fff;border:0;border-radius:6px;padding:9px 16px;font:inherit;cursor:pointer;text-decoration:none;display:inline-block;margin-top:12px}
+button.sec{background:#e8edf5;color:var(--ink)}button.del,a.del{color:var(--f);background:none;padding:0;margin:0}
+:focus-visible{outline:3px solid #9bbcf2;outline-offset:2px}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-weight:600}
+.flash{background:#e6f0ff;border:1px solid #b7d0f7;padding:10px 14px;border-radius:8px;margin-bottom:16px}
+.stat{font-size:2rem;font-weight:700}.muted{color:var(--muted)}
+.bar{height:10px;background:#e8edf5;border-radius:6px;overflow:hidden;margin:4px 0 12px}.bar i{display:block;height:100%}
+.tip{background:#eef4ff;border-left:4px solid var(--accent);padding:8px 12px;margin:8px 0;border-radius:4px}
+</style></head><body>
+{% if session.uid %}<nav><b>FormLog</b>
+{% for ep,l in [('dashboard','Dashboard'),('workouts','Workouts'),('food','Food'),('body','Body & Diet'),('reminders','Reminders')] %}
+<a href="{{ url_for(ep) }}" class="{{ 'on' if request.endpoint==ep }}">{{ l }}</a>{% endfor %}
+<span class="sp"></span><a href="{{ url_for('export') }}">Export CSV</a><a href="{{ url_for('logout') }}">Log out</a></nav>{% endif %}
+<main>{% for m in get_flashed_messages() %}<div class="flash">{{ m }}</div>{% endfor %}
+{% block body %}{% endblock %}</main></body></html>
